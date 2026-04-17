@@ -2,11 +2,10 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
 <title>Compra do Livro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
+<!--<style>
 body {
   font-family: Arial;
   background: #0f172a;
@@ -55,6 +54,132 @@ textarea {
 
 .qr {
   margin-top: 15px;
+}
+
+</style>-->
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 15px;
+}
+
+/* CONTAINER */
+.box {
+  width: 100%;
+  max-width: 420px;
+  margin: auto;
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* TITULOS */
+h1, h2, h3 {
+  margin-top: 0;
+}
+
+/* INPUTS */
+input, textarea, button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+}
+
+/* INPUT */
+input {
+  background: #334155;
+  color: white;
+}
+
+/* TEXTAREA */
+textarea {
+  background: #020617;
+  color: #22c55e;
+  font-size: 14px;
+}
+
+/* BOTÃO */
+button {
+  background: #22c55e;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #16a34a;
+  transform: scale(1.02);
+}
+
+/* TEXTO PEQUENO */
+small {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* QR */
+.qr {
+  margin-top: 15px;
+  border-radius: 10px;
+}
+
+/* VALOR */
+.informe-valor {
+  font-size: 28px;
+  margin: 10px 0;
+}
+
+/* ESCONDER */
+.hidden {
+  display: none;
+}
+
+/* MOBILE EXTRA SMALL */
+@media (max-width: 350px) {
+  .box {
+    padding: 15px;
+  }
+
+  input, button, textarea {
+    font-size: 14px;
+    padding: 12px;
+  }
+}
+
+/* TABLET */
+@media (min-width: 600px) {
+  .box {
+    max-width: 500px;
+    padding: 25px;
+  }
+}
+
+/* DESKTOP */
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .box {
+    max-width: 420px;
+  }
 }
 </style>
 </head>
@@ -113,7 +238,9 @@ textarea {
    <hr>
   <div id="dados-cliente"></div>
 
-  <button id="btnEnviar">ENVIAR dados para whatsapp</button>
+  <!--<button id="btnEnviar">ENVIAR dados para whatsapp</button>-->
+  
+  <button id="btnEnviar">📲 Enviar dados no WhatsApp</button>
 </div>
 
 <script>
@@ -221,8 +348,15 @@ function copiarPix() {
   const pix = document.getElementById("pix");
   pix.select();
   document.execCommand("copy");
-  alert("PIX copiado!");
+  //alert("PIX copiado!");
+  
+  button.innerText = "✔ Copiado!";
+setTimeout(() => {
+  button.innerText = "Copiar PIX";
+}, 2000);
 }
+
+
 
 // QR CODE
 /*function gerarQRCode(texto) {
@@ -233,4 +367,4 @@ function copiarPix() {
 </script>
 
 </body>
-</html>
+  </html>
