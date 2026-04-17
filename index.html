@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Compra do Livro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!--<style>
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.box {
+  max-width: 400px;
+  margin: auto;
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+input {width: 90%;
+  background: #334155;
+  color: white;
+}
+
+button {
+  background: #22c55e;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.qr {
+  margin-top: 15px;
+}
+
+</style>-->
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 15px;
+}
+
+/* CONTAINER */
+.box {
+  width: 100%;
+  max-width: 420px;
+  margin: auto;
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* TITULOS */
+h1, h2, h3 {
+  margin-top: 0;
+}
+
+/* INPUTS */
+input, textarea, button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+}
+
+/* INPUT */
+input {
+  background: #334155;
+  color: white;
+}
+
+/* TEXTAREA */
+textarea {
+  background: #020617;
+  color: #22c55e;
+  font-size: 14px;
+}
+
+/* BOTÃO */
+button {
+  background: #22c55e;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #16a34a;
+  transform: scale(1.02);
+}
+
+/* TEXTO PEQUENO */
+small {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* QR */
+.qr {
+  margin-top: 15px;
+  border-radius: 10px;
+}
+
+/* VALOR */
+.informe-valor {
+  font-size: 28px;
+  margin: 10px 0;
+}
+
+/* ESCONDER */
+.hidden {
+  display: none;
+}
+
+/* MOBILE EXTRA SMALL */
+@media (max-width: 350px) {
+  .box {
+    padding: 15px;
+  }
+
+  input, button, textarea {
+    font-size: 14px;
+    padding: 12px;
+  }
+}
+
+/* TABLET */
+@media (min-width: 600px) {
+  .box {
+    max-width: 500px;
+    padding: 25px;
+  }
+}
+
+/* DESKTOP */
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .box {
+    max-width: 420px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- FORM -->
+<div class="box" id="telaForm">
+  <h2>Comprar Livro</h2>
+
+  <form id="form">
+    <input type="text" id="nome" placeholder="Seu nome" required>
+    <input type="text" id="whatsapp" placeholder="Seu WhatsApp (com DDD)" required>
+    <input type="email" id="email" placeholder="Seu e-mail" required>
+
+    <button type="submit">Ir para pagamento</button>
+  </form>
+  
+  <p style="text-align: left; font-size: 10px;">*Adicione um telefone e e-mail válido, para que possamos entrar em contato.</p>
+  
+</div>
+
+
+<!-- PAGAMENTO -->
+<div class="box hidden" id="telaPagamento">
+  <h2>Pagamento via PIX</h2>
+
+  <p id="dadosCliente"></p>
+
+  <p>Escaneie o QR Code:</p>
+  <!--<img id="qrcode" class="qr" width="200">-->
+  
+   <hr>
+      <!--<h3>Sobre o PIX</h3>
+      <div class="dados-qrcode">
+      <p>Nome:</p><b>DEYVSON JOSE PAULINO DE SOUZA</b></div>
+      <div class="dados-qrcode">
+      <p>Banco:</p><b>INTER</b></div>
+      
+  <div id="purchase-history">
+    <div class="pix">
+      !--<h1>PIX</h1>--
+      <h1 class="informe-valor">R$ 19,70</h1>
+      <p>Escaneie o QR code:</p>-->
+      <img src="qr-code-pix.png" style="width:100%;">
+     
+      
+
+  <p>Ou copie o código:</p>
+  <textarea id="pix" readonly></textarea>
+
+  <button onclick="copiarPix()">Copiar PIX</button>
+
+<br />
+<br />
+   <hr>
+  <div id="dados-cliente"></div>
+
+  <!--<button id="btnEnviar">ENVIAR dados para whatsapp</button>-->
+  
+  <button id="btnEnviar">📲 Enviar dados no WhatsApp</button>
+</div>
+
+<script>
+
+// 🔐 VAR TEMPORÁRIA
+let dadosCliente = {};
+
+// 🔐 GERAR SENHA
+function gerarSenha(tamanho = 8) {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let senha = '';
+  for (let i = 0; i < tamanho; i++) {
+    senha += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return senha;
+}
+
+const PIX = "00020101021126590014br.gov.bcb.pix0111012184674100222Clube do livro Rabisco520400005303986540519.705802BR5920DEYVSON J P DE SOUZA6007CARPINA62070503***6304C30A";
+const WHATSAPP_LOJA = "5581984294752";
+
+// SUBMIT
+document.getElementById("form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const nome = document.getElementById("nome").value;
+  const whatsapp = document.getElementById("whatsapp").value.replace(/\D/g, '');
+  const email = document.getElementById("email").value;
+  const senha = gerarSenha();
+
+  // SALVA TEMPORÁRIO
+  dadosCliente = { nome, whatsapp, email, senha };
+
+  // ENVIA PARA SUA LOJA
+  const mensagemLoja = `📦 NOVO PEDIDO
+
+👤 Nome: ${nome}
+📱 WhatsApp: ${whatsapp}
+📧 Email: ${email}
+🔐 Senha: ${senha}
+
+📚 Produto: Livro Pai Rico Pai Pobre"
+💰 Valor: R$ 19,70
+
+⚠️ Aguardando pagamento via PIX`;
+
+  window.open(`https://wa.me/${WHATSAPP_LOJA}?text=${encodeURIComponent(mensagemLoja)}`, '_blank');
+
+  // IR PARA PAGAMENTO
+  setTimeout(() => {
+    mostrarPagamento();
+  }, 800);
+});
+
+// MOSTRAR PAGAMENTO
+function mostrarPagamento() {
+  const { nome, email, senha } = dadosCliente;
+
+  document.getElementById("telaForm").classList.add("hidden");
+  document.getElementById("telaPagamento").classList.remove("hidden");
+
+  document.getElementById("pix").value = PIX;
+  /*gerarQRCode(PIX);*/
+
+  document.getElementById("dadosCliente").innerHTML = `
+    👤 ${nome}<br>
+    📧 ${email}
+  `;
+
+  const mensagemCliente = `Olá ${nome}!
+Salve seus dados:
+
+Login: ${email}
+Senha: ${senha}
+
+Após o pagamento envie o comprovante:
+https://wa.me/${WHATSAPP_LOJA}
+
+*O acesso será liberado após a confirmação de pagamento.`;
+
+  document.getElementById("dados-cliente").innerText = mensagemCliente;
+}
+
+// 🚀 ENVIAR WHATSAPP PARA CLIENTE
+document.getElementById('btnEnviar').addEventListener('click', function() {
+
+  const { nome, email, senha, whatsapp } = dadosCliente;
+
+  const mensagemCliente = `Olá ${nome}!
+Salve seus dados:
+
+Login: ${email}
+Senha: ${senha}
+Página de acesso:
+https://deyvson-paulino.github.io/App-clube-do-livro-Rabisco-KEY-69uo22mb6-1776452434327/
+
+Após o pagamento envie o comprovante:
+https://wa.me/${WHATSAPP_LOJA}`;
+
+  window.open(`https://wa.me/55${whatsapp}?text=${encodeURIComponent(mensagemCliente)}`, '_blank');
+
+});
+
+// COPIAR PIX
+function copiarPix() {
+  const pix = document.getElementById("pix");
+  pix.select();
+  document.execCommand("copy");
+  //alert("PIX copiado!");
+  
+  button.innerText = "✔ Copiado!";
+setTimeout(() => {
+  button.innerText = "Copiar PIX";
+}, 2000);
+}
+
+
+
+// QR CODE
+/*function gerarQRCode(texto) {
+  const url = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(texto);
+  document.getElementById("qrcode").src = url;
+}*/
+
+</script>
+
+</body>
+</html>
